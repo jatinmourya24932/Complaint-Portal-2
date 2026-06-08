@@ -1,0 +1,54 @@
+# ---- Node / React ----
+frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/.DS_Store
+
+# ---- Java / Spring Boot ----
+backend/target/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/.idea/
+backend/.env
+backend/.DS_Store
+
+# ---- Logs ----
+*.log
+logs/
+backend/logs/
+
+# ---- OS / Editor files ----
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.vscode/
+*.swp
+
+# ---- Misc ----
+*.iml
+*.class
+*.jar
+*.war
+*.ear
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+
+
+### VS Code ###
+.vscode/
+
+.metadata/
