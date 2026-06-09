@@ -1,4 +1,4 @@
-package com.complaintportal.complaintportal;
+package com.complaintportal;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,3 +1,13 @@
 spring:
   application:
     name: complaintportal
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/complaint_portal
+    username: root
+    password: jatin1234
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
