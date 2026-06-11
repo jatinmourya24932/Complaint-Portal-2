@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import com.complaintportal.exception.DuplicateResourceException;
+import com.complaintportal.exception.InvalidCredentialsException;
+import com.complaintportal.user.dto.LoginRequest;
+import com.complaintportal.user.dto.LoginResponse;
 import com.complaintportal.user.dto.RegisterRequest;
 import com.complaintportal.user.dto.RegisterResponse;
 import com.complaintportal.user.entity.User;
@@ -52,6 +55,37 @@ public class UserServiceImpl implements UserService {
 			
 				
 		return response;
+	}
+
+	@Override
+	public LoginResponse login(LoginRequest request) {
+
+	    User user = userRepository
+	            .findByEmail(request.getEmail())
+	            .orElseThrow(
+	                    () -> new InvalidCredentialsException(
+	                            "Invalid Email"));
+
+	    if (!user.getPassword()
+	            .equals(request.getPassword())) {
+
+	        throw new InvalidCredentialsException(
+	                "Invalid password");
+
+	    }
+
+	    LoginResponse response =
+	            new LoginResponse();
+
+	    response.setId(user.getId());
+
+	    response.setName(user.getName());
+
+	    response.setEmail(user.getEmail());
+
+	    response.setRole(user.getRole());
+
+	    return response;
 	}
 	
 

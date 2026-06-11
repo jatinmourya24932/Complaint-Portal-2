@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.complaintportal.user.dto.LoginRequest;
+import com.complaintportal.user.dto.LoginResponse;
 import com.complaintportal.user.dto.RegisterRequest;
 import com.complaintportal.user.dto.RegisterResponse;
 import com.complaintportal.user.service.UserService;
@@ -25,6 +27,13 @@ public class AuthController {
 		
 		return userService.registerUser(request);
 		
+	}
+	
+	@PostMapping("/login")
+	public LoginResponse login(@RequestBody LoginRequest request) {
+
+	    return userService.login(request);
+
 	}
 	
 	
