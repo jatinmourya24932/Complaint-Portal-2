@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
+import com.complaintportal.exception.DuplicateResourceException;
 import com.complaintportal.user.dto.RegisterRequest;
 import com.complaintportal.user.dto.RegisterResponse;
 import com.complaintportal.user.entity.User;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
 		
 			if(userRepository.findByEmail(request.getEmail()).isPresent()) {
 				
-				 throw new RuntimeException("Email is already Registered");
+				 throw new DuplicateResourceException("Email is already Registered");
 			}
 		
 			User user = new User();
