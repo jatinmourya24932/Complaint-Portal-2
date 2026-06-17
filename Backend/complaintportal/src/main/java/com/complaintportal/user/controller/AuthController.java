@@ -1,5 +1,6 @@
 package com.complaintportal.user.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +10,7 @@ import com.complaintportal.user.dto.LoginRequest;
 import com.complaintportal.user.dto.LoginResponse;
 import com.complaintportal.user.dto.RegisterRequest;
 import com.complaintportal.user.dto.RegisterResponse;
+import com.complaintportal.user.dto.UserResponse;
 import com.complaintportal.user.service.UserService;
 
 @RestController
@@ -33,6 +35,13 @@ public class AuthController {
 	public LoginResponse login(@RequestBody LoginRequest request) {
 
 	    return userService.login(request);
+
+	}
+	
+	@GetMapping("/me")
+	public UserResponse getCurrentUser() {
+
+	    return userService.getCurrentUser();
 
 	}
 	

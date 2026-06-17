@@ -2,11 +2,22 @@ package com.complaintportal.user.dto;
 
 import com.complaintportal.user.enums.Role;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class RegisterRequest {
-	
+	@NotBlank(message="Name is Required")
 	private String name;
+	
+	@Size(min = 6, message = "Password must be at least 6 characters")
+	@NotBlank(message = "Password is required")
 	private String password;
+	
+	@Email(message = "Invalid email format")
+	@NotBlank(message = "Email is required")
 	private String email;
+	@NotBlank(message="Role is Required")
 	private Role role;
 	public String getName() {
 		return name;

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.complaintportal.complaint.dto.ComplaintResponse;
 import com.complaintportal.complaint.dto.CreateComplaintRequest;
@@ -16,6 +17,8 @@ import com.complaintportal.complaint.service.ComplaintService;
 import com.complaintportal.exception.ResourceNotFoundException;
 import com.complaintportal.user.entity.User;
 import com.complaintportal.user.repository.UserRepository;
+
+import jakarta.validation.Valid;
 
 @Service
 public class ComplaintServiceImpl implements ComplaintService{
@@ -30,7 +33,7 @@ public class ComplaintServiceImpl implements ComplaintService{
 
 
 	@Override
-	public ComplaintResponse createComplaint(CreateComplaintRequest request) {
+	public ComplaintResponse createComplaint(@Valid @RequestBody  CreateComplaintRequest request) {
 		
 		User createdBy = userRepository
 		        .findById(request.getCreatedById())
