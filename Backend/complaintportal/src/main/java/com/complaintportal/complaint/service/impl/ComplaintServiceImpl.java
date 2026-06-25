@@ -14,6 +14,7 @@ import com.complaintportal.complaint.entity.Complaint;
 import com.complaintportal.complaint.enums.ComplaintStatus;
 import com.complaintportal.complaint.repository.ComplaintRepository;
 import com.complaintportal.complaint.service.ComplaintService;
+import com.complaintportal.email.service.EmailService;
 import com.complaintportal.exception.ResourceNotFoundException;
 import com.complaintportal.user.entity.User;
 import com.complaintportal.user.repository.UserRepository;
@@ -25,10 +26,12 @@ public class ComplaintServiceImpl implements ComplaintService{
 	
 	private final ComplaintRepository complaintRepository;
 	private final UserRepository userRepository;
-	public ComplaintServiceImpl(ComplaintRepository complaintRepository, UserRepository userRepository) {
+	private final EmailService emailService;
+	public ComplaintServiceImpl(ComplaintRepository complaintRepository, UserRepository userRepository,EmailService emailService) {
 		super();
 		this.complaintRepository = complaintRepository;
 		this.userRepository = userRepository;
+		this.emailService = emailService;
 	}
 
 
@@ -75,6 +78,11 @@ public class ComplaintServiceImpl implements ComplaintService{
 		Complaint savedComplaint = complaintRepository.save(complaint);
 		
 		ComplaintResponse response = mapToResponse(savedComplaint);
+		
+		System.out.println(" before complaint is send");
+		emailService.sendComplaintNotification(savedComplaint);
+		
+		System.out.println(" aftere complaint is send");
 		
 		return response;
 	}
@@ -162,6 +170,10 @@ public class ComplaintServiceImpl implements ComplaintService{
 
 	    Complaint updatedComplaint =
 	            complaintRepository.save(complaint);
+	    
+	    emailService.sendStatusUpdateNotification(
+	            updatedComplaint);
+	   
 
 	    ComplaintResponse response =
 	           mapToResponse(updatedComplaint);
