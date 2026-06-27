@@ -8,23 +8,31 @@ import com.complaintportal.complaint.enums.Priority;
 
 public class ComplaintResponse {
 
-	private Long id;
+    private Long id;
 
-	private String title;
+    private String trackingId;
 
-	private String description;
+    private String title;
 
-	private ComplaintStatus status;
+    private String description;
 
-	private Priority priority;
+    private ComplaintStatus status;
 
-	private Category category;
+    private Priority priority;
 
-	private String createdByName;
+    private Category category;
 
-	private String againstUserName;
+    private String studentName;
 
-	private LocalDateTime createdAt;
+    private String facultyName;
+
+    private String subjectName;
+
+    private String departmentName;
+
+    private boolean anonymous;
+
+    private LocalDateTime createdAt;
 
 	public Long getId() {
 		return id;
@@ -32,6 +40,14 @@ public class ComplaintResponse {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getTrackingId() {
+		return trackingId;
+	}
+
+	public void setTrackingId(String trackingId) {
+		this.trackingId = trackingId;
 	}
 
 	public String getTitle() {
@@ -74,20 +90,44 @@ public class ComplaintResponse {
 		this.category = category;
 	}
 
-	public String getCreatedByName() {
-		return createdByName;
+	public String getStudentName() {
+		return studentName;
 	}
 
-	public void setCreatedByName(String createdByName) {
-		this.createdByName = createdByName;
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
 	}
 
-	public String getAgainstUserName() {
-		return againstUserName;
+	public String getFacultyName() {
+		return facultyName;
 	}
 
-	public void setAgainstUserName(String againstUserName) {
-		this.againstUserName = againstUserName;
+	public void setFacultyName(String facultyName) {
+		this.facultyName = facultyName;
+	}
+
+	public String getSubjectName() {
+		return subjectName;
+	}
+
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
+	public boolean isAnonymous() {
+		return anonymous;
+	}
+
+	public void setAnonymous(boolean anonymous) {
+		this.anonymous = anonymous;
 	}
 
 	public LocalDateTime getCreatedAt() {
@@ -97,4 +137,6 @@ public class ComplaintResponse {
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
+
+   
 }

@@ -111,9 +111,11 @@ public class EmailServiceImpl
                         complaint.getTitle(),
                         complaint.getStatus());
 
-        sendEmail(
-                complaint.getCreatedBy().getEmail(),
+         sendEmail(
+                complaint.getStudentProfile()
+                         .getUser()
+                         .getEmail(),
                 subject,
                 body);
-    }
+         }
 }

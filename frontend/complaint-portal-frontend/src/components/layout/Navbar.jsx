@@ -1,80 +1,57 @@
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
+  return (
+    <nav className="fixed top-0 z-50 w-full border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-8">
 
-    return (
+        <Link to="/" className="flex items-center gap-2">
 
-        <nav className="fixed top-0 left-0 z-50 w-full border-b border-white/10 bg-black/30 backdrop-blur-xl">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 text-xl font-bold text-white">
+            S
+          </div>
 
-            <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-8">
+          <div>
 
-                {/* Logo */}
+            <h1 className="text-xl font-bold text-white">
+              ShadowSpeak
+              <span className="ml-1 text-violet-400">
+                2.0
+              </span>
+            </h1>
 
-                <div>
+            <p className="text-xs text-gray-400">
+              AI Complaint Portal
+            </p>
 
-                    <h1 className="text-2xl font-bold text-white">
+          </div>
 
-                        Shadow<span className="text-violet-500">Speak</span>
+        </Link>
 
-                        <span className="ml-2 text-sm text-gray-400">
-                            2.0
-                        </span>
+        <div className="hidden items-center gap-10 text-sm text-gray-300 lg:flex">
 
-                    </h1>
+          <a href="#features" className="hover:text-violet-400">
+            Features
+          </a>
 
-                </div>
+          <a href="#workflow" className="hover:text-violet-400">
+            Workflow
+          </a>
 
-                {/* Menu */}
+          <a href="#contact" className="hover:text-violet-400">
+            Contact
+          </a>
 
-                <div className="hidden gap-10 text-gray-300 lg:flex">
+        </div>
 
-                    <Link
-                        className="transition hover:text-violet-400"
-                        to="/">
+        <Link
+          to="/login"
+          className="rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 px-6 py-3 font-semibold text-white transition hover:scale-105"
+        >
+          Login
+        </Link>
 
-                        Home
-
-                    </Link>
-
-                    <a
-                        className="transition hover:text-violet-400"
-                        href="#features">
-
-                        Features
-
-                    </a>
-
-                    <a
-                        className="transition hover:text-violet-400"
-                        href="#workflow">
-
-                        Workflow
-
-                    </a>
-
-                    <a
-                        className="transition hover:text-violet-400"
-                        href="#contact">
-
-                        Contact
-
-                    </a>
-
-                </div>
-
-                {/* Login */}
-
-                <button
-                    className="rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 px-6 py-3 font-semibold text-white transition hover:scale-105">
-
-                    Login
-
-                </button>
-
-            </div>
-
-        </nav>
-
-    );
-
+      </div>
+    </nav>
+  );
 }

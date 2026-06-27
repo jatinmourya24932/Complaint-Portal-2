@@ -12,6 +12,8 @@ import com.complaintportal.exception.DuplicateResourceException;
 import com.complaintportal.exception.InvalidCredentialsException;
 import com.complaintportal.exception.ResourceNotFoundException;
 import com.complaintportal.security.JwtService;
+import com.complaintportal.studentprofile.entity.StudentProfile;
+import com.complaintportal.studentprofile.repository.StudentProfileRepository;
 import com.complaintportal.user.dto.LoginRequest;
 import com.complaintportal.user.dto.LoginResponse;
 import com.complaintportal.user.dto.RegisterRequest;
@@ -35,45 +37,58 @@ public class UserServiceImpl implements UserService {
 	
 	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
+	private final StudentProfileRepository studentProfileRepository;
 
-	public UserServiceImpl(UserRepository userRepository,PasswordEncoder passwordEncoder,JwtService jwtService) {
+	public UserServiceImpl(UserRepository userRepository,PasswordEncoder passwordEncoder,JwtService jwtService,StudentProfileRepository studentProfileRepository) {
 		super();
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.jwtService =jwtService;
+		this.studentProfileRepository =studentProfileRepository;
 	}
 
 	@Override
-	public RegisterResponse registerUser(@Valid @RequestBody RegisterRequest request) {
-		
-			if(userRepository.findByEmail(request.getEmail()).isPresent()) {
-				
-				 throw new DuplicateResourceException("Email is already Registered");
-			}
-		
-			User user = new User();
-			
-			user.setName(request.getName());
-			user.setEmail(request.getEmail());
-			user.setPassword(
-			        passwordEncoder.encode(
-			                request.getPassword()));
-			user.setRole(Role.STUDENT);
-			user.setActive(true);
-			user.setCreatedAt(LocalDateTime.now());
-			
-			User savedUser = userRepository.save(user);
-			
-			RegisterResponse response= new RegisterResponse();
-			
-			response.setId(savedUser.getId());
-			response.setName(savedUser.getName());
-			response.setEmail(savedUser.getEmail());
-			response.setRole(savedUser.getRole());
-			
-			
-				
-		return response;
+	public RegisterResponse registerUser(RegisterRequest request) {
+
+	    if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+
+	        throw new DuplicateResourceException("Email is already Registered");
+	    }
+
+	    StudentProfile studentProfile = studentProfileRepository
+	            .findByRollNumber(request.getRollNumber())
+	            .orElseThrow(() ->
+	                    new ResourceNotFoundException("Invalid Roll Number"));
+
+	    if (studentProfile.getRegistered()) {
+
+	        throw new DuplicateResourceException("Student is already registered");
+	    }
+
+	    User user = new User();
+
+	    user.setName(request.getName());
+	    user.setEmail(request.getEmail());
+	    user.setPassword(passwordEncoder.encode(request.getPassword()));
+	    user.setRole(Role.STUDENT);
+	    user.setActive(true);
+	    user.setCreatedAt(LocalDateTime.now());
+
+	    User savedUser = userRepository.save(user);
+
+	    studentProfile.setUser(savedUser);
+	    studentProfile.setRegistered(true);
+
+	    studentProfileRepository.save(studentProfile);
+
+	    RegisterResponse response = new RegisterResponse();
+
+	    response.setId(savedUser.getId());
+	    response.setName(savedUser.getName());
+	    response.setEmail(savedUser.getEmail());
+	    response.setRole(savedUser.getRole());
+
+	    return response;
 	}
 
 	@Override

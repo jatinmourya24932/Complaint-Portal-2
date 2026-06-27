@@ -19,6 +19,15 @@ public class RegisterRequest {
 	private String email;
 	@NotBlank(message="Role is Required")
 	private Role role;
+	
+	@NotBlank
+	private String rollNumber;
+	public String getRollNumber() {
+		return rollNumber;
+	}
+	public void setRollNumber(String rollNumber) {
+		this.rollNumber = rollNumber;
+	}
 	public String getName() {
 		return name;
 	}

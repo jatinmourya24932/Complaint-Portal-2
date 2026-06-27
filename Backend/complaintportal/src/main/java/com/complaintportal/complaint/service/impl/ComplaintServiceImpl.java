@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-
+import com.complaintportal.common.enums.AssignedToType;
 import com.complaintportal.complaint.dto.ComplaintResponse;
 import com.complaintportal.complaint.dto.CreateComplaintRequest;
 import com.complaintportal.complaint.dto.UpdateStatusRequest;
@@ -14,77 +13,201 @@ import com.complaintportal.complaint.entity.Complaint;
 import com.complaintportal.complaint.enums.ComplaintStatus;
 import com.complaintportal.complaint.repository.ComplaintRepository;
 import com.complaintportal.complaint.service.ComplaintService;
+import com.complaintportal.complaint.util.TrackingIdGenerator;
 import com.complaintportal.email.service.EmailService;
 import com.complaintportal.exception.ResourceNotFoundException;
-import com.complaintportal.user.entity.User;
-import com.complaintportal.user.repository.UserRepository;
-
-import jakarta.validation.Valid;
+import com.complaintportal.facultysubject.entity.FacultySubject;
+import com.complaintportal.facultysubject.repository.FacultySubjectRepository;
+import com.complaintportal.master.department.entity.Department;
+import com.complaintportal.master.department.repository.DepartmentRepository;
+import com.complaintportal.studentprofile.entity.StudentProfile;
+import com.complaintportal.studentprofile.repository.StudentProfileRepository;
 
 @Service
 public class ComplaintServiceImpl implements ComplaintService{
 	
 	private final ComplaintRepository complaintRepository;
-	private final UserRepository userRepository;
+	private final StudentProfileRepository studentRepository;
+	private final FacultySubjectRepository facultySubjectRepository;
+	private final DepartmentRepository departmentRepository;
 	private final EmailService emailService;
-	public ComplaintServiceImpl(ComplaintRepository complaintRepository, UserRepository userRepository,EmailService emailService) {
-		super();
-		this.complaintRepository = complaintRepository;
-		this.userRepository = userRepository;
-		this.emailService = emailService;
+
+	public ComplaintServiceImpl(
+	        ComplaintRepository complaintRepository,
+	        StudentProfileRepository studentRepository,
+	        FacultySubjectRepository facultySubjectRepository,
+	        DepartmentRepository departmentRepository,
+	        EmailService emailService) {
+
+	    this.complaintRepository = complaintRepository;
+	    this.studentRepository = studentRepository;
+	    this.facultySubjectRepository = facultySubjectRepository;
+	    this.departmentRepository = departmentRepository;
+	    this.emailService = emailService;
 	}
 
+	public ComplaintResponse createComplaint(CreateComplaintRequest request) {
 
-	@Override
-	public ComplaintResponse createComplaint(@Valid @RequestBody  CreateComplaintRequest request) {
-		
-		User createdBy = userRepository
-		        .findById(request.getCreatedById())
-		        .orElseThrow(
-		                () -> new RuntimeException(
-		                        "User not found"));
+	    StudentProfile student = studentRepository
+	            .findById(request.getStudentProfileId())
+	            .orElseThrow(() ->
+	                    new RuntimeException("Student not found"));
 
-		User againstUser = userRepository
-		        .findById(request.getAgainstUserId())
-		        .orElseThrow(
-		                () -> new ResourceNotFoundException(
-		                        "Against user not found"));
-		
-		Complaint complaint = new Complaint();
-		
-		complaint.setTitle(request.getTitle());
+	    Complaint complaint = new Complaint();
 
-		complaint.setDescription(request.getDescription());
+	    complaint.setTrackingId(
+	            TrackingIdGenerator.generate());
 
-		complaint.setPriority(request.getPriority());
+	    complaint.setTitle(request.getTitle());
 
-		complaint.setCategory(request.getCategory());
+	    complaint.setDescription(request.getDescription());
 
-		complaint.setAnonymous(request.isAnonymous());
-		
-		complaint.setStatus(ComplaintStatus.PENDING);
+	    complaint.setPriority(request.getPriority());
 
-		complaint.setCreatedAt(LocalDateTime.now());
+	    complaint.setCategory(request.getCategory());
 
-		complaint.setSpamScore(0.0);
+	    complaint.setAnonymous(request.isAnonymous());
 
-		complaint.setAiSummary("");
-		
-		complaint.setCreatedBy(createdBy);
-		complaint.setUpdatedAt(LocalDateTime.now());
+	    complaint.setStatus(ComplaintStatus.SUBMITTED);
 
-		complaint.setAgainstUser(againstUser);
-		
-		Complaint savedComplaint = complaintRepository.save(complaint);
-		
-		ComplaintResponse response = mapToResponse(savedComplaint);
-		
-		System.out.println(" before complaint is send");
-		emailService.sendComplaintNotification(savedComplaint);
-		
-		System.out.println(" aftere complaint is send");
-		
-		return response;
+	    complaint.setStudentProfile(student);
+
+	    complaint.setCreatedAt(LocalDateTime.now());
+
+	    complaint.setUpdatedAt(LocalDateTime.now());
+
+	    complaint.setSpamScore(0.0);
+
+	    complaint.setDuplicateScore(0.0);
+
+	    complaint.setSentimentScore(0.0);
+
+	    complaint.setAiSummary(null);
+	    if(request.getFacultySubjectId()!=null){
+
+	        FacultySubject facultySubject =
+	                facultySubjectRepository
+	                .findById(request.getFacultySubjectId())
+	                .orElseThrow(()->
+	                        new RuntimeException("Faculty Subject not found"));
+
+	        complaint.setFacultySubject(facultySubject);
+
+	    }
+	    
+	    if(request.getDepartmentId()!=null){
+
+	        Department department =
+	                departmentRepository
+	                .findById(request.getDepartmentId())
+	                .orElseThrow(()->
+	                        new RuntimeException("Department not found"));
+
+	        complaint.setDepartment(department);
+
+	    }
+	    
+	    switch (request.getCategory()) {
+
+        case FACULTY:
+
+            if(request.getFacultySubjectId()==null){
+
+                throw new RuntimeException(
+                        "Faculty is required");
+
+            }
+
+            complaint.setAssignedToType(
+                    AssignedToType.FACULTY);
+
+            complaint.setAssignedToId(
+                    request.getFacultySubjectId());
+
+            break;
+
+        case INFRASTRUCTURE:
+
+            complaint.setAssignedToType(
+                    AssignedToType.ADMIN);
+
+            complaint.setAssignedToId(1L);
+
+            break;
+
+        case LIBRARY:
+
+            complaint.setAssignedToType(
+                    AssignedToType.LIBRARY);
+
+            complaint.setAssignedToId(1L);
+
+            break;
+
+        case TRANSPORT:
+
+            complaint.setAssignedToType(
+                    AssignedToType.TRANSPORT);
+
+            complaint.setAssignedToId(1L);
+
+            break;
+
+        default:
+
+            complaint.setAssignedToType(
+                    AssignedToType.ADMIN);
+
+            complaint.setAssignedToId(1L);
+
+    }
+	    
+	    complaintRepository.save(complaint);
+	 // Student Confirmation
+	    emailService.sendEmail(
+	            complaint.getStudentProfile()
+	                    .getUser()
+	                    .getEmail(),
+	            "Complaint Submitted Successfully",
+	            "Your complaint has been registered successfully.\n\nTracking ID : "
+	                    + complaint.getTrackingId());
+	    
+	    if (complaint.getFacultySubject() != null) {
+
+	        emailService.sendEmail(
+
+	                complaint.getFacultySubject()
+	                        .getFacultyProfile()
+	                        .getUser()
+	                        .getEmail(),
+
+	                "New Complaint Assigned",
+
+	                "A new complaint has been assigned to you.\nTracking ID : "
+	                        + complaint.getTrackingId());
+
+	    }
+	    
+		/*
+		 * if (complaint.getFacultySubject() != null && complaint.getFacultySubject()
+		 * .getFacultyProfile() .getDepartment() .getHodUser() != null) {
+		 * 
+		 * emailService.sendEmail(
+		 * 
+		 * complaint.getFacultySubject() .getFacultyProfile() .getDepartment()
+		 * .getHodUser() .getEmail(),
+		 * 
+		 * "New Complaint Registered",
+		 * 
+		 * "A complaint has been registered in your department.\nTracking ID : " +
+		 * complaint.getTrackingId());
+		 * 
+		 * }
+		 */
+	    
+
+	    return mapToResponse(complaint);
+
 	}
 
 	@Override
@@ -118,14 +241,45 @@ public class ComplaintServiceImpl implements ComplaintService{
 	        response.setCategory(
 	                complaint.getCategory());
 
-	        response.setCreatedByName(
-	                complaint.getCreatedBy()
-	                         .getName());
+	        response.setStudentName(
 
-	        response.setAgainstUserName(
-	                complaint.getAgainstUser()
-	                         .getName());
+	                complaint.getStudentProfile()
+	                        .getUser()
+	                        .getName()
 
+	        );
+
+	        if (complaint.getFacultySubject() != null) {
+
+	            response.setFacultyName(
+
+	                    complaint.getFacultySubject()
+	                            .getFacultyProfile()
+	                            .getUser()
+	                            .getName()
+
+	            );
+
+	            response.setSubjectName(
+
+	                    complaint.getFacultySubject()
+	                            .getSubject()
+	                            .getSubjectName()
+
+	            );
+
+	        }
+
+	        if (complaint.getDepartment() != null) {
+
+	            response.setDepartmentName(
+
+	                    complaint.getDepartment()
+	                            .getName()
+
+	            );
+
+	        }
 	        response.setCreatedAt(
 	                complaint.getCreatedAt());
 
@@ -183,64 +337,62 @@ public class ComplaintServiceImpl implements ComplaintService{
 
 	}
 	
+	
 	@Override
-	public List<ComplaintResponse> getComplaintsByStudent(Long userId) {
+	public List<ComplaintResponse> getComplaintsByStudent(Long studentProfileId) {
 
-	    User user = userRepository.findById(userId)
+	    studentRepository.findById(studentProfileId)
 	            .orElseThrow(() ->
-	                    new ResourceNotFoundException("User not found"));
+	                    new ResourceNotFoundException("Student not found"));
 
 	    List<Complaint> complaints =
-	            complaintRepository.findByCreatedBy(user);
+	            complaintRepository.findByStudentProfileId(studentProfileId);
 
-	    List<ComplaintResponse> responses =
-	            new ArrayList<>();
+	    List<ComplaintResponse> responses = new ArrayList<>();
 
 	    for (Complaint complaint : complaints) {
 
-	        ComplaintResponse response =
-	                mapToResponse(complaint);
+	        responses.add(mapToResponse(complaint));
 
-	        responses.add(response);
 	    }
 
 	    return responses;
 	}
 	
 	@Override
-	public List<ComplaintResponse> getComplaintsAgainstUser(Long userId) {
+	public List<ComplaintResponse> getComplaintsByFacultySubject(Long facultySubjectId) {
 
-	    User user = userRepository.findById(userId)
+	    facultySubjectRepository.findById(facultySubjectId)
 	            .orElseThrow(() ->
-	                    new ResourceNotFoundException("User not found"));
+	                    new ResourceNotFoundException("Faculty Subject not found"));
 
 	    List<Complaint> complaints =
-	            complaintRepository.findByAgainstUser(user);
+	            complaintRepository.findByFacultySubjectId(facultySubjectId);
 
-	    List<ComplaintResponse> responses =
-	            new ArrayList<>();
+	    List<ComplaintResponse> responses = new ArrayList<>();
 
 	    for (Complaint complaint : complaints) {
 
-	        ComplaintResponse response =
-	                mapToResponse(complaint);
+	        responses.add(mapToResponse(complaint));
 
-	        responses.add(response);
 	    }
 
 	    return responses;
 	}
-	
 	
 	private ComplaintResponse mapToResponse(
-	        Complaint complaint) {
+	        Complaint complaint){
 
 	    ComplaintResponse response =
 	            new ComplaintResponse();
 
 	    response.setId(complaint.getId());
 
-	    response.setTitle(complaint.getTitle());
+	    response.setTrackingId(
+	            complaint.getTrackingId());
+
+	    response.setTitle(
+	            complaint.getTitle());
 
 	    response.setDescription(
 	            complaint.getDescription());
@@ -254,15 +406,75 @@ public class ComplaintServiceImpl implements ComplaintService{
 	    response.setCategory(
 	            complaint.getCategory());
 
-	    response.setCreatedByName(
-	            complaint.getCreatedBy().getName());
-
-	    response.setAgainstUserName(
-	            complaint.getAgainstUser().getName());
+	    response.setAnonymous(
+	            complaint.isAnonymous());
 
 	    response.setCreatedAt(
 	            complaint.getCreatedAt());
 
+	    response.setStudentName(
+
+	            complaint.getStudentProfile()
+
+	                    .getUser()
+
+	                    .getName()
+
+	    );
+
+	    if(complaint.getFacultySubject()!=null){
+
+	        response.setFacultyName(
+
+	                complaint.getFacultySubject()
+
+	                        .getFacultyProfile()
+
+	                        .getUser()
+
+	                        .getName()
+
+	        );
+
+	        response.setSubjectName(
+
+	                complaint.getFacultySubject()
+
+	                        .getSubject()
+
+	                        .getSubjectName()
+
+	        );
+
+	    }
+
+	    if(complaint.getDepartment()!=null){
+
+	        response.setDepartmentName(
+
+	                complaint.getDepartment()
+
+	                        .getName()
+
+	        );
+
+	    }
+
 	    return response;
+
 	}
+
+	@Override
+	public ComplaintResponse getComplaintByTrackingId(String trackingId) {
+
+	    Complaint complaint = complaintRepository
+	            .findByTrackingId(trackingId)
+	            .orElseThrow(() ->
+	                    new ResourceNotFoundException(
+	                            "Complaint not found with Tracking Id : " + trackingId));
+
+	    return mapToResponse(complaint);
+
+	}
+	
 }

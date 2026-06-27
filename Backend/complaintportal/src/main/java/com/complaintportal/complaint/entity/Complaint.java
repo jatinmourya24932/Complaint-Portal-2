@@ -1,61 +1,81 @@
 package com.complaintportal.complaint.entity;
 
 import java.time.LocalDateTime;
+
 import com.complaintportal.complaint.enums.Category;
 import com.complaintportal.complaint.enums.ComplaintStatus;
 import com.complaintportal.complaint.enums.Priority;
-import com.complaintportal.user.entity.User;
+import com.complaintportal.common.enums.AssignedToType;
+import com.complaintportal.facultysubject.entity.FacultySubject;
+import com.complaintportal.master.department.entity.Department;
+import com.complaintportal.studentprofile.entity.StudentProfile;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-
+import jakarta.persistence.*;
 
 @Entity
-@Table(name="complaints")
+@Table(name = "complaints")
 public class Complaint {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	@Column(nullable=false)
-	private String title;
-	@Column(nullable=false,columnDefinition ="TEXT")
-	private String description;
-	
-	@Enumerated(EnumType.STRING)
-	private ComplaintStatus status;
-	
-	@Enumerated(EnumType.STRING)
-	private Priority priority;
-	
-	@Enumerated(EnumType.STRING)
-	private Category category;
-	
-	private boolean anonymous;
-	@Column(name="spam_score")
-	private Double spamScore;
-	@Column(name="ai_summary")
-	private String aiSummary;
-	
-	@Column(name="created_at")
-	private LocalDateTime createdAt;
-	@Column(name = "updated_at")
-	private LocalDateTime updatedAt;
-	@ManyToOne
-	@JoinColumn(name = "created_by",nullable=false)
-	private User createdBy;
-	
-	@ManyToOne
-	@JoinColumn(name = "against_user",nullable=false)
-	private User againstUser;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String trackingId;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String description;
+
+    @Enumerated(EnumType.STRING)
+    private ComplaintStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
+    private boolean anonymous;
+
+    private String attachment;
+
+    @Column(name = "spam_score")
+    private Double spamScore;
+
+    @Column(name = "ai_summary")
+    private String aiSummary;
+
+    @Column(name = "sentiment_score")
+    private Double sentimentScore;
+
+    @Column(name = "duplicate_score")
+    private Double duplicateScore;
+
+    @Enumerated(EnumType.STRING)
+    private AssignedToType assignedToType;
+
+    private Long assignedToId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_profile_id")
+    private StudentProfile studentProfile;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "faculty_subject_id")
+    private FacultySubject facultySubject;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    private LocalDateTime resolvedAt;
 
 	public Long getId() {
 		return id;
@@ -63,6 +83,14 @@ public class Complaint {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getTrackingId() {
+		return trackingId;
+	}
+
+	public void setTrackingId(String trackingId) {
+		this.trackingId = trackingId;
 	}
 
 	public String getTitle() {
@@ -113,6 +141,14 @@ public class Complaint {
 		this.anonymous = anonymous;
 	}
 
+	public String getAttachment() {
+		return attachment;
+	}
+
+	public void setAttachment(String attachment) {
+		this.attachment = attachment;
+	}
+
 	public Double getSpamScore() {
 		return spamScore;
 	}
@@ -127,6 +163,62 @@ public class Complaint {
 
 	public void setAiSummary(String aiSummary) {
 		this.aiSummary = aiSummary;
+	}
+
+	public Double getSentimentScore() {
+		return sentimentScore;
+	}
+
+	public void setSentimentScore(Double sentimentScore) {
+		this.sentimentScore = sentimentScore;
+	}
+
+	public Double getDuplicateScore() {
+		return duplicateScore;
+	}
+
+	public void setDuplicateScore(Double duplicateScore) {
+		this.duplicateScore = duplicateScore;
+	}
+
+	public AssignedToType getAssignedToType() {
+		return assignedToType;
+	}
+
+	public void setAssignedToType(AssignedToType assignedToType) {
+		this.assignedToType = assignedToType;
+	}
+
+	public Long getAssignedToId() {
+		return assignedToId;
+	}
+
+	public void setAssignedToId(Long assignedToId) {
+		this.assignedToId = assignedToId;
+	}
+
+	public StudentProfile getStudentProfile() {
+		return studentProfile;
+	}
+
+	public void setStudentProfile(StudentProfile studentProfile) {
+		this.studentProfile = studentProfile;
+	}
+
+	public FacultySubject getFacultySubject() {
+		return facultySubject;
+	}
+
+	public void setFacultySubject(FacultySubject facultySubject) {
+		this.facultySubject = facultySubject;
+	}
+
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 
 	public LocalDateTime getCreatedAt() {
@@ -145,19 +237,12 @@ public class Complaint {
 		this.updatedAt = updatedAt;
 	}
 
-	public User getCreatedBy() {
-		return createdBy;
+	public LocalDateTime getResolvedAt() {
+		return resolvedAt;
 	}
 
-	public void setCreatedBy(User createdBy) {
-		this.createdBy = createdBy;
+	public void setResolvedAt(LocalDateTime resolvedAt) {
+		this.resolvedAt = resolvedAt;
 	}
 
-	public User getAgainstUser() {
-		return againstUser;
-	}
-
-	public void setAgainstUser(User againstUser) {
-		this.againstUser = againstUser;
-	}
 }

@@ -7,26 +7,27 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class CreateComplaintRequest {
-	@NotBlank(message = "Title is required")
-	private String title;
 
-	@NotBlank(message = "Description is required")
-	private String description;
+    @NotBlank
+    private String title;
 
-	@NotNull(message = "Priority is required")
-	private Priority priority;
+    @NotBlank
+    private String description;
 
-	@NotNull(message = "Category is required")
-	private Category category;
+    @NotNull
+    private Priority priority;
 
-	
-	private boolean anonymous;
-	
-	@NotNull(message = "Created By Id is required")
-	private Long createdById;
+    @NotNull
+    private Category category;
 
-	@NotNull(message = "Against User Id is required")
-	private Long againstUserId;
+    private boolean anonymous;
+
+    @NotNull
+    private Long studentProfileId;
+
+    private Long facultySubjectId;
+
+    private Long departmentId;
 
 	public String getTitle() {
 		return title;
@@ -68,19 +69,29 @@ public class CreateComplaintRequest {
 		this.anonymous = anonymous;
 	}
 
-	public Long getCreatedById() {
-		return createdById;
+	public Long getStudentProfileId() {
+		return studentProfileId;
 	}
 
-	public void setCreatedById(Long createdById) {
-		this.createdById = createdById;
+	public void setStudentProfileId(Long studentProfileId) {
+		this.studentProfileId = studentProfileId;
 	}
 
-	public Long getAgainstUserId() {
-		return againstUserId;
+	public Long getFacultySubjectId() {
+		return facultySubjectId;
 	}
 
-	public void setAgainstUserId(Long againstUserId) {
-		this.againstUserId = againstUserId;
+	public void setFacultySubjectId(Long facultySubjectId) {
+		this.facultySubjectId = facultySubjectId;
 	}
+
+	public Long getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(Long departmentId) {
+		this.departmentId = departmentId;
+	}
+
+    
 }

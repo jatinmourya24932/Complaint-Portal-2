@@ -6,6 +6,7 @@ import com.complaintportal.complaint.dto.ComplaintResponse;
 import com.complaintportal.complaint.dto.CreateComplaintRequest;
 import com.complaintportal.complaint.dto.UpdateStatusRequest;
 
+
 public interface ComplaintService {
 	
 	
@@ -19,6 +20,8 @@ public interface ComplaintService {
 	
 	List<ComplaintResponse> getComplaintsByStudent(Long userId);
 
-	List<ComplaintResponse> getComplaintsAgainstUser(Long userId);
-
+	List<ComplaintResponse> getComplaintsByFacultySubject(Long facultySubjectId);
+	
+	ComplaintResponse getComplaintByTrackingId(String trackingId);
+	
 }

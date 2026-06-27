@@ -18,69 +18,69 @@ public class ComplaintController {
 
     private final ComplaintService complaintService;
 
-    public ComplaintController(
-            ComplaintService complaintService) {
-
+    public ComplaintController(ComplaintService complaintService) {
         this.complaintService = complaintService;
     }
-    
+
+    // Create Complaint
     @PreAuthorize("hasRole('STUDENT')")
     @PostMapping
-    public ComplaintResponse createComplaint(@Valid
-            @RequestBody CreateComplaintRequest request) {
+    public ComplaintResponse createComplaint(
+            @Valid @RequestBody CreateComplaintRequest request) {
 
         return complaintService.createComplaint(request);
-
     }
-    
+
+    // Admin - All Complaints
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public List<ComplaintResponse>
-    getAllComplaints() {
+    public List<ComplaintResponse> getAllComplaints() {
 
-        return complaintService
-                .getAllComplaints();
+        return complaintService.getAllComplaints();
     }
-    
-    
+
+    // Complaint By Id
     @GetMapping("/{id}")
-    public ComplaintResponse
-    getComplaintById(
+    public ComplaintResponse getComplaintById(
             @PathVariable Long id) {
 
-        return complaintService
-                .getComplaintById(id);
+        return complaintService.getComplaintById(id);
     }
-    
+
+    // Update Status
     @PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
     @PatchMapping("/{id}/status")
     public ComplaintResponse updateComplaintStatus(
             @PathVariable Long id,
             @RequestBody UpdateStatusRequest request) {
 
-        return complaintService
-                .updateComplaintStatus(id, request);
-
+        return complaintService.updateComplaintStatus(id, request);
     }
-    
+
+    // Student Complaints
     @PreAuthorize("hasAnyRole('ADMIN','STUDENT')")
-    @GetMapping("/student/{id}")
-    public List<ComplaintResponse>
-    getComplaintsByStudent(
-            @PathVariable Long id) {
+    @GetMapping("/student/{studentProfileId}")
+    public List<ComplaintResponse> getComplaintsByStudent(
+            @PathVariable Long studentProfileId) {
 
-        return complaintService
-                .getComplaintsByStudent(id);
+        return complaintService.getComplaintsByStudent(studentProfileId);
     }
-    
-    @PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
-    @GetMapping("/against/{id}")
-    public List<ComplaintResponse>
-    getComplaintsAgainstUser(
-            @PathVariable Long id) {
 
-        return complaintService
-                .getComplaintsAgainstUser(id);
+    // Faculty Complaints
+    @PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
+    @GetMapping("/faculty-subject/{facultySubjectId}")
+    public List<ComplaintResponse> getComplaintsByFacultySubject(
+            @PathVariable Long facultySubjectId) {
+
+        return complaintService.getComplaintsByFacultySubject(facultySubjectId);
+    }
+
+    // Tracking Id
+    @GetMapping("/track/{trackingId}")
+    public ComplaintResponse getComplaintByTrackingId(
+            @PathVariable String trackingId) {
+
+        return complaintService.getComplaintByTrackingId(trackingId);
     }
 
 }
