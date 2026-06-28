@@ -4,6 +4,7 @@ import com.complaintportal.user.enums.Role;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class RegisterRequest {
@@ -17,7 +18,7 @@ public class RegisterRequest {
 	@Email(message = "Invalid email format")
 	@NotBlank(message = "Email is required")
 	private String email;
-	@NotBlank(message="Role is Required")
+	@NotNull(message = "Role is Required")
 	private Role role;
 	
 	@NotBlank

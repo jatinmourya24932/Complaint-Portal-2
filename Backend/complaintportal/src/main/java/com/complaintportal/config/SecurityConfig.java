@@ -47,6 +47,10 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/auth/**")
                         .permitAll()
+                        .requestMatchers("/api/student-profile/**")
+                        .permitAll()
+                        .requestMatchers("/api/complaints/track/**")
+                        .permitAll()
                         
                         
                         .anyRequest()

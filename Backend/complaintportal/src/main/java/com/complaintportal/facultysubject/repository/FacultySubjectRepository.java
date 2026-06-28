@@ -20,4 +20,5 @@ public interface FacultySubjectRepository
             Long academicYearId,
             Section section);
 
+    List<FacultySubject> findByFacultyProfileDepartmentId(Long departmentId);
 }

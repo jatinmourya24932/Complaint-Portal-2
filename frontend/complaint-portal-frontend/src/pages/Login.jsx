@@ -1,15 +1,37 @@
-import LoginCard from "../components/auth/LoginCard";
+import LoginForm from "../components/auth/LoginForm";
+import { Navigate } from "react-router-dom";
 
 export default function Login() {
+    const token = sessionStorage.getItem("token");
 
-    return (
+if(token){
 
-        <div className="min-h-screen bg-[#020617] flex items-center justify-center">
+    const role=sessionStorage.getItem("role");
 
-            <LoginCard />
+    switch(role){
 
-        </div>
+        case "ADMIN":
 
-    );
+            return <Navigate to="/admin/dashboard"/>;
 
+        case "HOD":
+
+            return <Navigate to="/hod/dashboard"/>;
+
+        case "FACULTY":
+
+            return <Navigate to="/faculty/dashboard"/>;
+
+        default:
+
+            return <Navigate to="/student/dashboard"/>;
+
+    }
+
+}
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-6">
+      <LoginForm />
+    </div>
+  );
 }

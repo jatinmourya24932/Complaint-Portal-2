@@ -105,9 +105,37 @@ public class FacultySubjectService {
                 facultySubject.getAcademicYear()
                         .getYearName(),
 
-                facultySubject.getSection().name()
+                facultySubject.getSection()
 
         );
+
+    }
+    
+    public List<FacultySubjectResponse> getByDepartment(Long departmentId) {
+
+        List<FacultySubject> facultySubjects =
+                repository.findByFacultyProfileDepartmentId(departmentId);
+
+        return facultySubjects
+                .stream()
+                .map(fs -> new FacultySubjectResponse(
+
+                        fs.getId(),
+
+                        fs.getFacultyProfile()
+                                .getUser()
+                                .getName(),
+
+                        fs.getSubject()
+                                .getSubjectName(),
+
+                        fs.getAcademicYear()
+                                .getYearName(),
+
+                        fs.getSection()
+
+                ))
+                .toList();
 
     }
 

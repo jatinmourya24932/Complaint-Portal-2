@@ -1,5 +1,7 @@
 package com.complaintportal.facultysubject.dto;
 
+import com.complaintportal.common.enums.Section;
+
 public class FacultySubjectResponse {
 
     private Long id;
@@ -10,14 +12,14 @@ public class FacultySubjectResponse {
 
     private String academicYear;
 
-    private String section;
+    private Section section;
 
     public FacultySubjectResponse(
             Long id,
             String facultyName,
             String subjectName,
             String academicYear,
-            String section) {
+            Section section) {
 
         this.id = id;
         this.facultyName = facultyName;
@@ -43,7 +45,7 @@ public class FacultySubjectResponse {
         return academicYear;
     }
 
-    public String getSection() {
+    public Section getSection() {
         return section;
     }
 

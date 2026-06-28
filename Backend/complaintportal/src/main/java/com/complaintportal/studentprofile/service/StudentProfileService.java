@@ -19,7 +19,7 @@ public class StudentProfileService {
 
     // Verify Roll Number
     public StudentProfileResponse verifyRollNumber(String rollNumber) {
-
+    		System.out.println("verify roll");
         StudentProfile student = repository.findByRollNumber(rollNumber)
                 .orElseThrow(() -> new RuntimeException("Invalid Roll Number"));
 
