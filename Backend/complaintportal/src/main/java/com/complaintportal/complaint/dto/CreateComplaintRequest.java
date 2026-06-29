@@ -27,7 +27,6 @@ public class CreateComplaintRequest {
 
     private Long facultySubjectId;
 
-    private Long departmentId;
 
 	public String getTitle() {
 		return title;
@@ -85,13 +84,7 @@ public class CreateComplaintRequest {
 		this.facultySubjectId = facultySubjectId;
 	}
 
-	public Long getDepartmentId() {
-		return departmentId;
-	}
 
-	public void setDepartmentId(Long departmentId) {
-		this.departmentId = departmentId;
-	}
 
     
 }

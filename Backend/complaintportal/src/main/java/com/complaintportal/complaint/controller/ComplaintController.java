@@ -48,7 +48,7 @@ public class ComplaintController {
     }
 
     // Update Status
-    @PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
+    @PreAuthorize("hasAnyRole('ADMIN','FACULTY','HOD')")
     @PatchMapping("/{id}/status")
     public ComplaintResponse updateComplaintStatus(
             @PathVariable Long id,
@@ -67,7 +67,7 @@ public class ComplaintController {
     }
 
     // Faculty Complaints
-    @PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
+    @PreAuthorize("hasAnyRole('ADMIN','FACULTY','HOD')")
     @GetMapping("/faculty-subject/{facultySubjectId}")
     public List<ComplaintResponse> getComplaintsByFacultySubject(
             @PathVariable Long facultySubjectId) {
@@ -81,6 +81,24 @@ public class ComplaintController {
             @PathVariable String trackingId) {
 
         return complaintService.getComplaintByTrackingId(trackingId);
+    }
+    @PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
+    @GetMapping("/faculty/{userId}")
+    public List<ComplaintResponse> getComplaintsByFaculty(
+
+            @PathVariable Long userId){
+
+        return complaintService.getComplaintsByFaculty(userId);
+
+    }
+    @PreAuthorize("hasAnyRole('ADMIN','HOD')")
+    @GetMapping("/hod/{userId}")
+    public List<ComplaintResponse> getComplaintsByHod(
+
+            @PathVariable Long userId){
+
+        return complaintService.getComplaintsByHod(userId);
+
     }
 
 }

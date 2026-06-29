@@ -10,6 +10,7 @@ import com.complaintportal.facultysubject.entity.FacultySubject;
 import com.complaintportal.master.department.entity.Department;
 import com.complaintportal.studentprofile.entity.StudentProfile;
 
+
 import jakarta.persistence.*;
 
 @Entity
@@ -76,7 +77,7 @@ public class Complaint {
     private LocalDateTime updatedAt;
 
     private LocalDateTime resolvedAt;
-
+    
 	public Long getId() {
 		return id;
 	}
@@ -244,5 +245,7 @@ public class Complaint {
 	public void setResolvedAt(LocalDateTime resolvedAt) {
 		this.resolvedAt = resolvedAt;
 	}
+
+	
 
 }

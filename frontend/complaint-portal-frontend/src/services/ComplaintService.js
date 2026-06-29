@@ -1,6 +1,7 @@
 import api from "./api";
 
-export const getStudentComplaints = async (userId)=>{
+// Student
+export const getComplaintsByStudent = async (userId) => {
 
     const response = await api.get(
 
@@ -10,9 +11,10 @@ export const getStudentComplaints = async (userId)=>{
 
     return response.data;
 
-}
+};
 
-export const createComplaint = async(data)=>{
+// Create Complaint
+export const createComplaint = async (data) => {
 
     const response = await api.post(
 
@@ -24,9 +26,10 @@ export const createComplaint = async(data)=>{
 
     return response.data;
 
-}
+};
 
-export const trackComplaint = async(trackingId)=>{
+// Track Complaint
+export const trackComplaint = async (trackingId) => {
 
     const response = await api.get(
 
@@ -36,9 +39,10 @@ export const trackComplaint = async(trackingId)=>{
 
     return response.data;
 
-}
+};
 
-export const getAllComplaints = async()=>{
+// Admin
+export const getAllComplaints = async () => {
 
     const response = await api.get(
 
@@ -48,4 +52,49 @@ export const getAllComplaints = async()=>{
 
     return response.data;
 
-}
+};
+
+// Update Status
+export const updateComplaintStatus = async (id, status) => {
+
+    const response = await api.patch(
+
+        `/complaints/${id}/status`,
+
+        {
+
+            status
+
+        }
+
+    );
+
+    return response.data;
+
+};
+
+// Faculty
+export const getComplaintsByFaculty = async (userId) => {
+
+    const response = await api.get(
+
+        `/complaints/faculty/${userId}`
+
+    );
+
+    return response.data;
+
+};
+
+// HOD
+export const getComplaintsByHod = async (userId) => {
+
+    const response = await api.get(
+
+        `/complaints/hod/${userId}`
+
+    );
+
+    return response.data;
+
+};

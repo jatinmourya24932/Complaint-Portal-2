@@ -23,5 +23,6 @@ public interface ComplaintService {
 	List<ComplaintResponse> getComplaintsByFacultySubject(Long facultySubjectId);
 	
 	ComplaintResponse getComplaintByTrackingId(String trackingId);
-	
+	List<ComplaintResponse> getComplaintsByFaculty(Long userId);
+	List<ComplaintResponse> getComplaintsByHod(Long userId);
 }

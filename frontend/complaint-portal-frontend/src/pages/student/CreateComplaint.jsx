@@ -1,23 +1,51 @@
-import ComplaintForm from "../../components/complaints/ComplaintForm";
+import { useEffect, useState } from "react";
 
-export default function CreateComplaint() {
-  return (
-    <div className="min-h-screen bg-slate-900 p-8">
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
 
-      <div className="mx-auto max-w-5xl">
+import { getComplaintsByStudent } from "../../services/ComplaintService";
 
-        <h1 className="mb-2 text-4xl font-bold text-white">
-          Create Complaint
-        </h1>
+export default function StudentDashboard() {
 
-        <p className="mb-8 text-gray-400">
-          Submit your complaint securely. Anonymous complaints are supported.
-        </p>
+    const [complaints, setComplaints] = useState([]);
 
-        <ComplaintForm />
+    useEffect(() => {
 
-      </div>
+        loadComplaints();
 
-    </div>
-  );
+    }, []);
+
+    const loadComplaints = async () => {
+
+        try {
+
+            const userId = sessionStorage.getItem("id");
+
+            const data = await getComplaintsByStudent(userId);
+
+            setComplaints(data);
+
+        }
+
+        catch (error) {
+
+            console.log(error);
+
+        }
+
+    };
+
+    return (
+
+        <DashboardLayout
+
+            title="Student Dashboard"
+
+            complaints={complaints}
+
+            showActions={false}
+
+        />
+
+    );
+
 }

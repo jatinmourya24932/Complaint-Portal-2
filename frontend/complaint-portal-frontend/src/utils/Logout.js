@@ -1,7 +1,7 @@
-export default function logout(navigate){
+export const logout = () => {
 
     sessionStorage.clear();
 
-    navigate("/login");
+    window.location.href = "/login";
 
-}
+};

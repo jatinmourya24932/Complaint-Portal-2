@@ -24,7 +24,7 @@ public class AttachmentResponse {
 	public void setFileType(String fileType) {
 		this.fileType = fileType;
 	}
-	public String getFilepath() {
+	public String getFilePath() {
 		return filePath;
 	}
 	public void setFilePath(String filePath) {

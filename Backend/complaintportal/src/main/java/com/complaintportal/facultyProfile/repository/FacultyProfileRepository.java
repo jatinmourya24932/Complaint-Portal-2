@@ -13,5 +13,6 @@ public interface FacultyProfileRepository
     List<FacultyProfile> findByDepartmentId(Long departmentId);
 
     Optional<FacultyProfile> findByUserId(Long userId);
+    
 
 }

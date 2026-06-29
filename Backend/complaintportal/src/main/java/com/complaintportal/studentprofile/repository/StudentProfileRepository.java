@@ -18,4 +18,5 @@ List<StudentProfile> findByDepartmentId(Long departmentId);
 
 Optional<StudentProfile> findByUserId(Long userId);
 
+
 }

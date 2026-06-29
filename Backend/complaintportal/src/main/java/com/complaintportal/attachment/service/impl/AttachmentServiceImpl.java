@@ -74,9 +74,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 	        attachment.setFileType(
 	                file.getContentType());
 
-	        attachment.setFilePath(
-	                filePath.toString());
-
+	        attachment.setFilePath(fileName);
 	        attachment.setUploadedAt(
 	                LocalDateTime.now());
 

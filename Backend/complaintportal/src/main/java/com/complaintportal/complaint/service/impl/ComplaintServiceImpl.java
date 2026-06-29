@@ -16,6 +16,8 @@ import com.complaintportal.complaint.service.ComplaintService;
 import com.complaintportal.complaint.util.TrackingIdGenerator;
 import com.complaintportal.email.service.EmailService;
 import com.complaintportal.exception.ResourceNotFoundException;
+import com.complaintportal.facultyProfile.entity.FacultyProfile;
+import com.complaintportal.facultyProfile.repository.FacultyProfileRepository;
 import com.complaintportal.facultysubject.entity.FacultySubject;
 import com.complaintportal.facultysubject.repository.FacultySubjectRepository;
 import com.complaintportal.master.department.entity.Department;
@@ -31,19 +33,22 @@ public class ComplaintServiceImpl implements ComplaintService{
 	private final FacultySubjectRepository facultySubjectRepository;
 	private final DepartmentRepository departmentRepository;
 	private final EmailService emailService;
+	private final FacultyProfileRepository facultyProfileRepository;
 
 	public ComplaintServiceImpl(
 	        ComplaintRepository complaintRepository,
 	        StudentProfileRepository studentRepository,
 	        FacultySubjectRepository facultySubjectRepository,
 	        DepartmentRepository departmentRepository,
-	        EmailService emailService) {
+	        EmailService emailService,
+	        FacultyProfileRepository facultyProfileRepository) {
 
 	    this.complaintRepository = complaintRepository;
 	    this.studentRepository = studentRepository;
 	    this.facultySubjectRepository = facultySubjectRepository;
 	    this.departmentRepository = departmentRepository;
 	    this.emailService = emailService;
+	    this.facultyProfileRepository = facultyProfileRepository;
 	}
 
 	public ComplaintResponse createComplaint(CreateComplaintRequest request) {
@@ -71,6 +76,12 @@ public class ComplaintServiceImpl implements ComplaintService{
 	    complaint.setStatus(ComplaintStatus.SUBMITTED);
 
 	    complaint.setStudentProfile(student);
+	    
+	    complaint.setDepartment(
+
+	            student.getDepartment()
+
+	    );
 
 	    complaint.setCreatedAt(LocalDateTime.now());
 
@@ -95,17 +106,7 @@ public class ComplaintServiceImpl implements ComplaintService{
 
 	    }
 	    
-	    if(request.getDepartmentId()!=null){
-
-	        Department department =
-	                departmentRepository
-	                .findById(request.getDepartmentId())
-	                .orElseThrow(()->
-	                        new RuntimeException("Department not found"));
-
-	        complaint.setDepartment(department);
-
-	    }
+	   
 	    
 	    switch (request.getCategory()) {
 
@@ -339,26 +340,19 @@ public class ComplaintServiceImpl implements ComplaintService{
 	
 	
 	@Override
-	public List<ComplaintResponse> getComplaintsByStudent(Long studentProfileId) {
+	public List<ComplaintResponse> getComplaintsByStudent(Long userId) {
 
-	    studentRepository.findById(studentProfileId)
+	    StudentProfile student = studentRepository
+	            .findByUserId(userId)
 	            .orElseThrow(() ->
 	                    new ResourceNotFoundException("Student not found"));
 
-	    List<Complaint> complaints =
-	            complaintRepository.findByStudentProfileId(studentProfileId);
-
-	    List<ComplaintResponse> responses = new ArrayList<>();
-
-	    for (Complaint complaint : complaints) {
-
-	        responses.add(mapToResponse(complaint));
-
-	    }
-
-	    return responses;
+	    return complaintRepository
+	            .findByStudentProfileId(student.getId())
+	            .stream()
+	            .map(this::mapToResponse)
+	            .toList();
 	}
-	
 	@Override
 	public List<ComplaintResponse> getComplaintsByFacultySubject(Long facultySubjectId) {
 
@@ -474,6 +468,32 @@ public class ComplaintServiceImpl implements ComplaintService{
 	                            "Complaint not found with Tracking Id : " + trackingId));
 
 	    return mapToResponse(complaint);
+
+	}
+	
+	@Override
+	public List<ComplaintResponse> getComplaintsByFaculty(Long userId) {
+
+	    FacultyProfile faculty = facultyProfileRepository
+	            .findByUserId(userId)
+	            .orElseThrow(() ->
+	                    new ResourceNotFoundException("Faculty not found"));
+
+	    return complaintRepository
+	            .findByFacultySubjectFacultyProfileId(faculty.getId())
+	            .stream()
+	            .map(this::mapToResponse)
+	            .toList();
+	}
+	
+	@Override
+	public List<ComplaintResponse> getComplaintsByHod(Long userId){
+
+	    return complaintRepository
+	            .findByDepartmentHodUserId(userId)
+	            .stream()
+	            .map(this::mapToResponse)
+	            .toList();
 
 	}
 	

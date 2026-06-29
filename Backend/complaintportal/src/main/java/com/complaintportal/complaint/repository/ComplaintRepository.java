@@ -15,6 +15,8 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
     List<Complaint> findByFacultySubjectId(Long facultySubjectId);
 
     List<Complaint> findByDepartmentId(Long departmentId);
+    List<Complaint> findByFacultySubjectFacultyProfileId(Long facultyProfileId);
+    List<Complaint> findByDepartmentHodUserId(Long userId);
     
 
 }

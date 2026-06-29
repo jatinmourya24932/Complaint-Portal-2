@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { createComplaint } from "../../services/ComplaintService";
 import { getSubjects } from "../../services/MasterService";
 import { getFacultyBySubject } from "../../services/FacultySubjectService";
+import { uploadAttachment } from "../../services/AttachmentService";
 
 export default function ComplaintForm() {
 
@@ -131,89 +132,85 @@ export default function ComplaintForm() {
 
     const handleSubmit = async (e) => {
 
-        e.preventDefault();
+    e.preventDefault();
 
-        try {
+    try {
 
-            setLoading(true);
+        setLoading(true);
 
-            await createComplaint({
+        const complaint = await createComplaint({
 
-                title: formData.title,
+            title: formData.title,
 
-                description: formData.description,
+            description: formData.description,
 
-                priority: formData.priority,
+            priority: formData.priority,
 
-                category: formData.category,
+            category: formData.category,
 
-                anonymous: formData.anonymous,
+            anonymous: formData.anonymous,
 
-                studentProfileId: 1,
+            studentProfileId: 1, // baad me session se dynamic kar dena
 
-                facultySubjectId:
+            facultySubjectId:
+                formData.category === "FACULTY"
+                    ? Number(formData.facultySubjectId)
+                    : null
 
-                    formData.category === "FACULTY"
+        });
 
-                        ?
+        if (formData.attachment) {
 
-                        Number(formData.facultySubjectId)
+            await uploadAttachment(
 
-                        :
+                complaint.id,
 
-                        null,
-
-                departmentId: null
-
-            });
-
-            toast.success(
-
-                "Complaint Submitted"
-
-            );
-
-            setFormData({
-
-                title: "",
-
-                description: "",
-
-                category: "",
-
-                priority: "MEDIUM",
-
-                anonymous: false,
-
-                subjectId: "",
-
-                facultySubjectId: "",
-
-                attachment: null
-
-            });
-
-        }
-
-        catch (error) {
-
-            toast.error(
-
-                error.response?.data?.message ||
-
-                "Submission Failed"
+                formData.attachment
 
             );
 
         }
 
-        finally {
+        toast.success("Complaint Submitted Successfully");
 
-            setLoading(false);
+        setFormData({
 
-        }
+            title: "",
+            description: "",
+            category: "",
+            priority: "MEDIUM",
+            anonymous: false,
+            subjectId: "",
+            facultySubjectId: "",
+            attachment: null
 
-    };
+        });
+
+        setFacultySubjects([]);
+
+    }
+
+    catch (error) {
+
+        console.log(error);
+
+        toast.error(
+
+            error.response?.data?.message ||
+
+            "Submission Failed"
+
+        );
+
+    }
+
+    finally {
+
+        setLoading(false);
+
+    }
+
+};
 
     return (
 
