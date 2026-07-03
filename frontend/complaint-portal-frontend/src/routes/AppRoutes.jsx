@@ -12,6 +12,14 @@ import FacultyDashboard from "../pages/faculty/FacultyDashboard";
 import HodDashboard from "../pages/hod/HodDashboard";
 import Register from "../pages/Register";
 import CreateComplaint from "../pages/student/CreateComplaint";
+import StudentLayout from "../layouts/StudentLayout";
+import FacultyLayout from "../layouts/FacultyLayout";
+import HodLayout from "../layouts/HodLayout";
+import AdminLayout from "../layouts/AdminLayout";
+import MyComplaints from "../pages/student/MyComplaints";
+import FacultyManagement from "../pages/admin/FacultyManagement";
+
+import { Outlet } from "react-router-dom";
 
 export default function AppRoutes() {
 
@@ -37,48 +45,101 @@ export default function AppRoutes() {
                 />
                     
                 <Route
-                    path="/admin/dashboard"
-                    element={
-                        <ProtectedRoute allowedRoles={["ADMIN"]}>
-                            <AdminDashboard />
-                        </ProtectedRoute>
-                    }
-                />
-
-                <Route
-                    path="/student/dashboard"
-                    element={
-                        <ProtectedRoute allowedRoles={["STUDENT"]}>
-                            <StudentDashboard />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-    path="/student/create-complaint"
     element={
-        <ProtectedRoute allowedRoles={["STUDENT"]}>
-            <CreateComplaint />
+        <ProtectedRoute allowedRoles={["ADMIN"]}>
+            <AdminLayout />
         </ProtectedRoute>
     }
+>
+
+    <Route
+
+        path="/admin/dashboard"
+
+        element={<AdminDashboard />}
+
+    />
+    <Route
+
+    path="/admin/faculty"
+
+    element={<FacultyManagement />}
+
 />
 
-                <Route
-                    path="/faculty/dashboard"
-                    element={
-                        <ProtectedRoute allowedRoles={["FACULTY"]}>
-                            <FacultyDashboard />
-                        </ProtectedRoute>
-                    }
-                />
+</Route>
+
+               <Route
+    element={
+        <ProtectedRoute allowedRoles={["STUDENT"]}>
+            <StudentLayout />
+        </ProtectedRoute>
+    }
+>
+
+    <Route
+
+        path="/student/dashboard"
+
+        element={<StudentDashboard />}
+
+    />
+
+    <Route
+
+        path="/student/create-complaint"
+
+        element={<CreateComplaint />}
+
+
+    />
+    <Route
+    path="/student/my-complaints"
+    element={<MyComplaints />}
+/>
+     <Route
+        path="/student/track"
+        element={<TrackComplaint />}
+    />
+
+
+</Route>
+
+               <Route
+    element={
+        <ProtectedRoute allowedRoles={["FACULTY"]}>
+            <FacultyLayout />
+        </ProtectedRoute>
+    }
+>
+
+    <Route
+
+        path="/faculty/dashboard"
+
+        element={<FacultyDashboard />}
+
+    />
+
+</Route>
 
                 <Route
-                    path="/hod/dashboard"
-                    element={
-                        <ProtectedRoute allowedRoles={["HOD"]}>
-                            <HodDashboard />
-                        </ProtectedRoute>
-                    }
-                />
+    element={
+        <ProtectedRoute allowedRoles={["HOD"]}>
+            <HodLayout />
+        </ProtectedRoute>
+    }
+>
+
+    <Route
+
+        path="/hod/dashboard"
+
+        element={<HodDashboard />}
+
+    />
+
+</Route>
                     <Route
 
 path="/register"

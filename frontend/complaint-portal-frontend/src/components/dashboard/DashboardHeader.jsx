@@ -1,34 +1,20 @@
-import {
-    FiLogOut,
-    FiUser,
-    FiCalendar
-} from "react-icons/fi";
+import { FiBell, FiCalendar, FiChevronDown } from "react-icons/fi";
 
-import { logout } from "../../utils/Logout";
-
-export default function DashboardHeader({
-
-    title
-
-}) {
+export default function DashboardHeader({ title }) {
 
     const name = sessionStorage.getItem("name");
 
-    const role = sessionStorage.getItem("role");
+    const date = new Date().toLocaleDateString("en-IN", {
 
-    const date = new Date().toLocaleDateString("en-IN",{
-
-        day:"numeric",
-
-        month:"long",
-
-        year:"numeric"
+        day: "numeric",
+        month: "long",
+        year: "numeric"
 
     });
 
     return (
 
-        <div className="mb-8 flex flex-col gap-5 rounded-3xl border border-slate-700 bg-slate-900 p-6 shadow-2xl md:flex-row md:items-center md:justify-between">
+        <div className="mb-8 flex items-center justify-between rounded-3xl border border-slate-800 bg-slate-900 px-8 py-6">
 
             <div>
 
@@ -38,47 +24,39 @@ export default function DashboardHeader({
 
                 </h1>
 
-                <p className="mt-2 flex flex-wrap items-center gap-5 text-slate-400">
+                <div className="mt-3 flex items-center gap-3 text-slate-400">
 
-                    <span className="flex items-center gap-2">
+                    <FiCalendar />
 
-                        <FiUser />
+                    {date}
 
-                        {name}
-
-                    </span>
-
-                    <span className="rounded-full bg-violet-600/20 px-3 py-1 text-violet-300">
-
-                        {role}
-
-                    </span>
-
-                    <span className="flex items-center gap-2">
-
-                        <FiCalendar />
-
-                        {date}
-
-                    </span>
-
-                </p>
+                </div>
 
             </div>
 
-            <button
+            <div className="flex items-center gap-5">
 
-                onClick={logout}
+                <button className="relative rounded-2xl bg-slate-800 p-3 transition hover:bg-slate-700">
 
-                className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-red-600 to-rose-500 px-6 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                    <FiBell className="text-xl text-white" />
 
-            >
+                    <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"></span>
 
-                <FiLogOut />
+                </button>
 
-                Logout
+                <div className="flex items-center gap-5">
 
-            </button>
+    <button className="relative rounded-2xl bg-slate-800 p-3 transition hover:bg-slate-700">
+
+        <FiBell className="text-xl text-white" />
+
+        <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"></span>
+
+    </button>
+
+</div>
+
+            </div>
 
         </div>
 

@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 
 import DashboardContent from "../../components/dashboard/DashboardContent";
+import { getComplaintsByStudent } from "../../services/ComplaintService";
 
-import { getComplaintsByFaculty } from "../../services/ComplaintService";
-
-
-export default function FacultyDashboard() {
+export default function MyComplaints() {
 
     const [complaints, setComplaints] = useState([]);
 
@@ -15,13 +13,13 @@ export default function FacultyDashboard() {
 
     }, []);
 
-    const loadComplaints = async () => {
+    async function loadComplaints() {
 
         try {
 
             const userId = sessionStorage.getItem("id");
 
-            const data = await getComplaintsByFaculty(userId);
+            const data = await getComplaintsByStudent(userId);
 
             setComplaints(data);
 
@@ -29,19 +27,19 @@ export default function FacultyDashboard() {
 
         catch (error) {
 
-            console.log(error);
+            console.error(error);
 
         }
 
-    };
+    }
 
     return (
 
         <DashboardContent
-          
+
             complaints={complaints}
 
-            showActions={true}
+            showActions={false}
 
         />
 

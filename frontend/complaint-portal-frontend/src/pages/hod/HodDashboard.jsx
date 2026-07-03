@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 
-import DashboardLayout from "../../components/dashboard/DashboardLayout";
-
 import { getComplaintsByHod } from "../../services/ComplaintService";
+import DashboardContent from "../../components/dashboard/DashboardContent";
 
 export default function HodDashboard() {
 
@@ -36,9 +35,8 @@ export default function HodDashboard() {
 
     return (
 
-        <DashboardLayout
+        <DashboardContent
 
-            title="HOD Dashboard"
 
             complaints={complaints}
 

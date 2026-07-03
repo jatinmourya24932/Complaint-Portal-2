@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { getAllComplaints } from "../../services/ComplaintService";
 
-import DashboardLayout from "../../components/dashboard/DashboardLayout";
+import DashboardContent from "../../components/dashboard/DashboardContent";
 
 export default function AdminDashboard() {
 
@@ -34,9 +34,7 @@ export default function AdminDashboard() {
 
     return (
 
-        <DashboardLayout
-
-            title="Admin Dashboard"
+        <DashboardContent
 
             complaints={complaints}
 
