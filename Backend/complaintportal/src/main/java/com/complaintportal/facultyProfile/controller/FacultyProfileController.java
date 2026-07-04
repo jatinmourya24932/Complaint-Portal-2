@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.complaintportal.facultyProfile.dto.FacultyProfileResponse;
 import com.complaintportal.facultyProfile.service.FacultyProfileService;
+import jakarta.validation.Valid;
+import com.complaintportal.facultyProfile.dto.CreateFacultyRequest;
 
 @RestController
 @RequestMapping("/api/faculty-profile")
@@ -24,6 +26,22 @@ public class FacultyProfileController {
             @PathVariable Long departmentId) {
 
         return service.getFacultyByDepartment(departmentId);
+
+    }
+    @PostMapping
+    public FacultyProfileResponse createFaculty(
+
+            @Valid
+            @RequestBody
+            CreateFacultyRequest request){
+
+        return service.createFaculty(request);
+
+    }
+    @GetMapping
+    public List<FacultyProfileResponse> getAllFaculty(){
+
+        return service.getAllFaculty();
 
     }
 
