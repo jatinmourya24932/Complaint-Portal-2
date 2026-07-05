@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
 
-    baseURL: "https://complaint-portal-backend.up.railway.app",
+    baseURL: "https://complaint-portal-backend.up.railway.app/api",
 
     headers:{
 
