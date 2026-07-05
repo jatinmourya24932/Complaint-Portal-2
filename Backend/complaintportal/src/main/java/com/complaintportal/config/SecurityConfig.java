@@ -79,7 +79,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
 //                "http://localhost:3000",
 //                "http://localhost:5173",
-                "https://complaint-portal-2.vercel.app/"
+                "https://complaint-portal-2-j6dde4oia-jatinmourya.vercel.app"
         ));
 
         configuration.setAllowedMethods(List.of("*"));
