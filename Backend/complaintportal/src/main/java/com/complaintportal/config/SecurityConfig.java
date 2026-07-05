@@ -13,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.complaintportal.security.JwtFilter;
 
@@ -72,28 +72,36 @@ public class SecurityConfig {
     }
     
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-//                "http://localhost:3000",
-//                "http://localhost:5173",
-                "https://complaint-portal-2-j6dde4oia-jatinmourya.vercel.app"
+                "https://complaint-portal-2.vercel.app",
+                "https://complaint-portal-2-j6dde4oia-jatinmourya.vercel.app",
+                "http://localhost:5173"
         ));
 
-        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedMethods(List.of(
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH",
+                "OPTIONS"
+        ));
 
         configuration.setAllowedHeaders(List.of("*"));
 
+        configuration.setExposedHeaders(List.of("Authorization"));
+
         configuration.setAllowCredentials(true);
 
-        org.springframework.web.cors.UrlBasedCorsConfigurationSource source =
-                new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
-
     }
 }
