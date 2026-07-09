@@ -84,6 +84,12 @@ export const sidebarConfig = {
             path: "/admin/faculty"
         },
 
+         {
+            title: "Student",
+            icon: FiUsers,
+            path: "/admin/student"
+        },
+
         {
             title: "Departments",
             icon: FiLayers,

@@ -7,6 +7,7 @@ export default function FacultyManagement() {
 
     const [faculty, setFaculty] = useState([]);
     const [open, setOpen] = useState(false);
+    const [selectedFaculty, setSelectedFaculty] = useState(null);
 
     useEffect(() => {
 
@@ -44,17 +45,37 @@ export default function FacultyManagement() {
 
                 </h2>
 
-                <button
+               <button
+    onClick={() => {
 
-    onClick={() => setOpen(true)}
+        setSelectedFaculty(null);
+
+        setOpen(true);
+
+    }}
 
     className="rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 px-6 py-3 font-semibold text-white"
+>
+    + Add Faculty
+</button>
+
+{/* <button
+
+    onClick={() => {
+
+        setSelectedFaculty(f);
+
+        setOpen(true);
+
+    }}
+
+    className="rounded-lg bg-blue-600 px-4 py-2 text-white"
 
 >
 
-    + Add Faculty
+    Edit
 
-</button>
+</button> */}
 
             </div>
 
@@ -120,15 +141,23 @@ export default function FacultyManagement() {
 
                                     <td className="p-4 text-center">
 
-                                        <button
+                                         <button
 
-                                            className="rounded-lg bg-blue-600 px-4 py-2 text-white"
+    onClick={() => {
 
-                                        >
+        setSelectedFaculty(f);
 
-                                            Edit
+        setOpen(true);
 
-                                        </button>
+    }}
+
+    className="rounded-lg bg-blue-600 px-4 py-2 text-white"
+
+>
+
+    Edit
+
+</button>
 
                                     </td>
 
@@ -141,13 +170,23 @@ export default function FacultyManagement() {
                     </tbody>
 
                 </table>
-                {
+                
+
+    {
 
     open && (
 
         <FacultyModal
 
-            onClose={() => setOpen(false)}
+            faculty={selectedFaculty}
+
+            onClose={() => {
+
+                setOpen(false);
+
+                setSelectedFaculty(null);
+
+            }}
 
             onSuccess={loadFaculty}
 

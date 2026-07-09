@@ -60,6 +60,20 @@ export default function Sidebar() {
           role === "ADMIN" && (
 
             <NavLink
+              to="/student"
+              className="block rounded-xl px-4 py-3 text-gray-300 transition hover:bg-violet-600 hover:text-white"
+            >
+              👨‍🏫 student Management
+            </NavLink>
+
+          )
+
+        }
+
+        {
+          role === "ADMIN" && (
+
+            <NavLink
               to="/analytics"
               className="block rounded-xl px-4 py-3 text-gray-300 transition hover:bg-violet-600 hover:text-white"
             >

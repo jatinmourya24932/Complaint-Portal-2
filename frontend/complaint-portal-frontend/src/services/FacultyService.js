@@ -25,3 +25,14 @@ export const createFaculty = async (data) => {
     return response.data;
 
 };
+
+export const updateFaculty = async (id, data) => {
+
+    const response = await api.put(
+        `/faculty-profile/${id}`,
+        data
+    );
+
+    return response.data;
+
+};

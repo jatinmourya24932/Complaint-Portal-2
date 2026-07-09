@@ -20,6 +20,7 @@ import MyComplaints from "../pages/student/MyComplaints";
 import FacultyManagement from "../pages/admin/FacultyManagement";
 
 import { Outlet } from "react-router-dom";
+import StudentManagement from "@/pages/admin/StudentManagement";
 
 export default function AppRoutes() {
 
@@ -66,7 +67,13 @@ export default function AppRoutes() {
     element={<FacultyManagement />}
 
 />
+<Route
 
+    path="/admin/student"
+
+    element={<StudentManagement />}
+
+/>
 </Route>
 
                <Route
