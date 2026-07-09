@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.complaintportal.facultyProfile.dto.CreateFacultyRequest;
 import com.complaintportal.facultyProfile.dto.FacultyProfileResponse;
+import com.complaintportal.facultyProfile.dto.UpdateFacultyRequest;
 import com.complaintportal.facultyProfile.entity.FacultyProfile;
 import com.complaintportal.facultyProfile.repository.FacultyProfileRepository;
 import java.time.LocalDateTime;
@@ -181,6 +182,46 @@ public class FacultyProfileService {
 
                 .toList();
 
+    }
+    
+    @Transactional
+    public FacultyProfileResponse updateFaculty(
+            Long id,
+            UpdateFacultyRequest request){
+
+        FacultyProfile profile = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Faculty not found"));
+
+        Department department = departmentRepository.findById(
+                request.getDepartmentId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Department not found"));
+
+        User user = profile.getUser();
+
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+
+        userRepository.save(user);
+
+        profile.setDesignation(request.getDesignation());
+        profile.setPhone(request.getPhone());
+        profile.setDepartment(department);
+
+        FacultyProfile saved = repository.save(profile);
+
+        return new FacultyProfileResponse(
+                saved.getId(),
+                user.getId(),
+                user.getName(),
+                saved.getEmployeeCode(),
+                saved.getDesignation(),
+                saved.getPhone(),
+                department.getId(),
+                user.getEmail(),
+                department.getName()
+        );
     }
 
 }

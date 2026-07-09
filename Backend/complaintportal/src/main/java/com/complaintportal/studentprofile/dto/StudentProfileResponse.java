@@ -10,10 +10,16 @@ public class StudentProfileResponse {
     private String department;
     private Integer semester;
     private String section;
-    
+    private Boolean registered;
+    private Long courseId;
+    private Long departmentId;
+    private Long semesterId;
+    private Long academicYearId;
 
+	
 	public StudentProfileResponse(Long id, String name, String email, String rollNumber, String course,
-			String department, Integer semester, String section) {
+			String department, Integer semester, String section, Boolean registered, Long courseId, Long departmentId,
+			Long semesterId, Long academicYearId) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -23,6 +29,17 @@ public class StudentProfileResponse {
 		this.department = department;
 		this.semester = semester;
 		this.section = section;
+		this.registered = registered;
+		this.courseId = courseId;
+		this.departmentId = departmentId;
+		this.semesterId = semesterId;
+		this.academicYearId = academicYearId;
+	}
+	public Boolean getRegistered() {
+		return registered;
+	}
+	public void setRegistered(Boolean registered) {
+		this.registered = registered;
 	}
 	public Long getId() {
 		return id;
@@ -71,6 +88,30 @@ public class StudentProfileResponse {
 	}
 	public void setSection(String section) {
 		this.section = section;
+	}
+	public Long getCourseId() {
+		return courseId;
+	}
+	public void setCourseId(Long courseId) {
+		this.courseId = courseId;
+	}
+	public Long getDepartmentId() {
+		return departmentId;
+	}
+	public void setDepartmentId(Long departmentId) {
+		this.departmentId = departmentId;
+	}
+	public Long getSemesterId() {
+		return semesterId;
+	}
+	public void setSemesterId(Long semesterId) {
+		this.semesterId = semesterId;
+	}
+	public Long getAcademicYearId() {
+		return academicYearId;
+	}
+	public void setAcademicYearId(Long academicYearId) {
+		this.academicYearId = academicYearId;
 	}
 
 }

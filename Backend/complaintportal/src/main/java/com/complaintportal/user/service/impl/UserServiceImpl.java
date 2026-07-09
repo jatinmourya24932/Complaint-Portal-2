@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.RequestBody;
 
 import com.complaintportal.exception.DuplicateResourceException;
 import com.complaintportal.exception.InvalidCredentialsException;
@@ -26,7 +26,7 @@ import com.complaintportal.user.enums.Role;
 import com.complaintportal.user.repository.UserRepository;
 import com.complaintportal.user.service.UserService;
 
-import jakarta.validation.Valid;
+//import jakarta.validation.Valid;
 
 
 @Service
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
 
 	    User user = new User();
 
-	    user.setName(request.getName());
+	    user.setName(studentProfile.getStudentName());
 	    user.setEmail(request.getEmail());
 	    user.setPassword(passwordEncoder.encode(request.getPassword()));
 	    user.setRole(Role.STUDENT);

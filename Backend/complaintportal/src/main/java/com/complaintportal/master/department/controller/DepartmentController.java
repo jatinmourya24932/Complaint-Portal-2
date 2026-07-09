@@ -28,4 +28,10 @@ public class DepartmentController {
 
     }
 
+    @GetMapping
+    public List<DepartmentResponse> getAllDepartments() {
+
+        return service.getAllDepartments();
+
+    }
 }

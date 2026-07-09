@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.*;
 
 import com.complaintportal.facultyProfile.dto.FacultyProfileResponse;
+import com.complaintportal.facultyProfile.dto.UpdateFacultyRequest;
 import com.complaintportal.facultyProfile.service.FacultyProfileService;
 import jakarta.validation.Valid;
 import com.complaintportal.facultyProfile.dto.CreateFacultyRequest;
@@ -42,6 +43,17 @@ public class FacultyProfileController {
     public List<FacultyProfileResponse> getAllFaculty(){
 
         return service.getAllFaculty();
+
+    }
+    @PutMapping("/{id}")
+    public FacultyProfileResponse updateFaculty(
+
+            @PathVariable Long id,
+
+            @Valid
+            @RequestBody UpdateFacultyRequest request){
+
+        return service.updateFaculty(id, request);
 
     }
 

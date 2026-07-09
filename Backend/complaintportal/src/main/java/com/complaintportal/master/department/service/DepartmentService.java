@@ -27,4 +27,23 @@ public class DepartmentService {
                 .toList();
 
     }
+    public List<DepartmentResponse> getAllDepartments() {
+
+        return repository.findAll()
+
+                .stream()
+
+                .map(d -> new DepartmentResponse(
+
+                        d.getId(),
+
+                        d.getName()
+
+                       
+
+                ))
+
+                .toList();
+
+    }
 }

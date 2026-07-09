@@ -20,6 +20,9 @@ public class StudentProfile {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", unique = true)
     private User user;
+    
+    @Column(nullable = false)
+    private String studentName;
 
     @Column(nullable = false, unique = true)
     private String rollNumber;
@@ -116,6 +119,14 @@ public class StudentProfile {
 
 	public void setRegistered(Boolean registered) {
 		this.registered = registered;
+	}
+
+	public String getStudentName() {
+		return studentName;
+	}
+
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
 	}
 
     // getters setters

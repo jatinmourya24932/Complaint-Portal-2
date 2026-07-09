@@ -47,8 +47,11 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/auth/**")
                         .permitAll()
-                        .requestMatchers("/api/student-profile/**")
+                        .requestMatchers("/api/student-profile/verify/**")
                         .permitAll()
+
+                        .requestMatchers("/api/student-profile/**")
+                        .hasRole("ADMIN")
                         .requestMatchers("/api/complaints/track/**")
                         .permitAll()
                         .requestMatchers("/uploads/**").permitAll()
@@ -79,7 +82,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "https://complaint-portal-2.vercel.app",
                 "https://complaint-portal-2-j6dde4oia-jatinmourya.vercel.app",
-                "http://localhost:5173"
+                "http://localhost:5173/"
         ));
 
         configuration.setAllowedMethods(List.of(
